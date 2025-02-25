@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const cuaderno = Astro.props.cuaderno;
+---
+
+<Layout title="Cuaderno - MAMBO RECETAS">
+    <div class="container mx-auto px-4 py-8">
+        <img src="/images/recetas/Salmorejoreceta.png" alt="Salmorejo" class="w-full h-48 object-cover"/>
+        <h2 class="text-xl font-semibold text-sky-600 mb-2">Salmorejo</h2>
+        <slot />
+    </div>
+</Layout>
+
+<style>
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+</style>

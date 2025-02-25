@@ -1,0 +1,38 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const recetas = [
+  {
+    
+    imagen: "/public/images/recetas/Salmorejoreceta.png",
+    
+  },
+  {
+    
+    imagen: "/public/images/recetas/Cardcalabacin.png",
+    
+  },
+  {
+    
+    imagen: "/public/images/recetas/lentejasreceta.png",
+    
+  }
+];
+---
+
+<Layout title="Recetas - MAMBO RECETAS">
+  <h1 class="text-3xl font-bold text-sky-600 mb-8 text-center">Nuestras Recetas</h1>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {recetas.map(receta => (
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <img src={receta.imagen} alt={receta.titulo} class="w-full h-100
+         object-cover"/>
+        <div class="p-4">
+          <h2 class="text-xl font-semibold text-sky-600 mb-2">{receta.titulo}</h2>
+          <p class="text-gray-600">{receta.descripcion}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</Layout>

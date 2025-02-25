@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Cuaderno from '../pages/cuaderno.astro'; 
+
+const recetasDestacadas = [
+  {
+    titulo: "Salmorejo",
+    imagen: "/public/images/recetas/salmorejo-6495106_1280.jpg",
+    descripcion: "Auténtico salmorejo cordobés con huevo y jamón",
+    enlace: "/recetas#salmorejo"
+    
+  },
+  {
+    titulo: "Tiramisú Italiano",
+    imagen: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=300",
+    descripcion: "Postre italiano clásico con café y mascarpone",
+    enlace: "/recetas#tiramisu"
+  },
+  {
+    titulo: "Guacamole Mexicano",
+    imagen: "https://images.unsplash.com/photo-1604544203292-0daa7f847478?w=300",
+    descripcion: "Dip tradicional de aguacate con limón y cilantro",
+    enlace: "/recetas#guacamole"
+  },
+  {
+    titulo: "Sushi Roll California",
+    imagen: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=300",
+    descripcion: "Roll de sushi con pepino, aguacate y cangrejo",
+    enlace: "/recetas#sushi"
+  }
+];
+---
+
+<Layout title="MAMBO RECETAS">
+  <div class="imgnav">
+    <img src="/public/images/recetas/istockphoto-1392702529-2048x2048.jpg" alt="Recetas" class="mx-auto" />
+    </div>
+  <div class="text-center">
+    <h1 class="text-4xl font-bold text-sky-600 mb-6">Bienvenido a MAMBO RECETAS</h1>
+    <p class="text-xl text-gray-700 mb-8">Tu guía culinaria para recetas deliciosas y planificación semanal</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      <a href="/recetas" class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition">
+        <h2 class="text-2xl font-semibold text-sky-700 mb-2">Recetas</h2>
+        <p class="text-gray-600">Descubre nuestras  recetas</p>
+        <img src="../public/images/iconos/soup_11209456.png" alt="Recetas"class="mx-auto" />
+      </a>
+      
+      <a href="/videos" class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition">
+        <h2 class="text-2xl font-semibold text-sky-600 mb-2">Videos</h2>
+        <p class="text-gray-600">Aprende con  tutoriales en video</p>
+        <img src="/public/images/iconos/clapperboard_12918335.png" alt="Videos"class="mx-auto"  />
+      </a>
+      
+      <a href="/menu-semanal" class="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition">
+        <h2 class="text-2xl font-semibold text-sky-600 mb-2">Menú Semanal</h2>
+        <p class="text-gray-600">Planifica tus comidas semanales</p>
+        <img src="/public/images/iconos/calendar_17182739.png" alt="Menú Semanal" class="mx-auto"/>
+      </a>
+    </div>
+
+    <h2 class="text-3xl font-semibold text-sky-600 mb-6">Recetas Destacadas</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {recetasDestacadas.map(receta => (
+        <a href={receta.enlace} class="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+          <img src={receta.imagen} alt={receta.titulo} class="w-full h-40 object-cover"/>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-sky-600 mb-1">{receta.titulo}</h3>
+            <p class="text-sm text-gray-600">{receta.descripcion}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
+<style>
+  .imgnav {
+    border-radius:50%
+  }
+</style>

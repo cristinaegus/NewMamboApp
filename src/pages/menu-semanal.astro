@@ -1,0 +1,139 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+const comidas = ['Desayuno', 'Comida', 'Cena'];
+---
+
+<Layout title="Menú Semanal - MAMBO RECETAS">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-sky-600">Planificador de Menú Semanal</h1>
+      <button
+        id="printButton"
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition"
+      >
+        Descargar PDF
+      </button>
+    </div>
+    
+    <div id="menuContent" class="bg-white rounded-lg shadow-md p-6">
+      <div class="grid grid-cols-1 md:grid-cols-7 gap-2">
+        {diasSemana.map(dia => (
+          <div class="border rounded-sm   p-4">
+            <h2 class="text-lg font-semibold text-sky-600 mb-2">{dia}</h2>
+            <div class="space-y-2">
+              {comidas.map(comida => (
+                <div>
+                  <p class="text-xs text-gray-600">{comida}:</p>
+                  <input
+                    type="text"
+                    class="w-full border rounded p-1 text-sm focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+                    placeholder="Añadir receta..."
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { jsPDF } from 'jspdf';
+  import html2canvas from 'html2canvas';
+
+  const printButton = document.getElementById('printButton');
+  const menuContent = document.getElementById('menuContent');
+
+  if (printButton && menuContent) {
+    printButton.addEventListener('click', async () => {
+      try {
+        // Crear una copia del contenido para el PDF
+        const contentClone = menuContent.cloneNode(true) as HTMLElement;
+        document.body.appendChild(contentClone);
+        
+        // Aplicar estilos específicos para el PDF
+        contentClone.style.width = '1100px';
+        contentClone.style.position = 'absolute';
+        contentClone.style.left = '-9999px';
+        
+        // Convertir el contenido a canvas
+        const canvas = await html2canvas(contentClone, {
+          
+          logging: false,
+          useCORS: true
+        });
+        
+        // Eliminar la copia
+        document.body.removeChild(contentClone);
+        
+        // Crear PDF
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: 'a4'
+          
+        });
+        
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        
+        // Descargar PDF
+        pdf.save('menu-semanal-mambo-recetas.pdf');
+      } catch (error) {
+        console.error('Error al generar el PDF:', error);
+        alert('Hubo un error al generar el PDF. Por favor, inténtalo de nuevo.');
+      }
+    });
+
+    // Guardar datos en localStorage cuando se modifiquen
+    const inputs = menuContent.querySelectorAll('input');
+    inputs.forEach((input, index) => {
+      // Cargar datos guardados
+      const savedValue = localStorage.getItem(`menu-item-${index}`);
+      if (savedValue) {
+        input.value = savedValue;
+      }
+
+      // Guardar al modificar
+      input.addEventListener('input', (e) => {
+        const target = e.target as HTMLInputElement;
+        localStorage.setItem(`menu-item-${index}`, target.value);
+      });
+    });
+  }
+</script>
+
+<style>
+  @media print {
+    body * {
+      visibility: hidden;
+      text-overflow: ellipsis;
+     
+    }
+    #menuContent, #menuContent * {
+      visibility: visible;
+    }
+    #menuContent.menu-semanal {
+      font-size: 5pt;
+      font-family: Arial;
+      display: block;
+      margin: 2cm;
+      width:18cm; 
+      text-overflow: ellipsis;
+      
+    
+    }
+    #menuContent {
+      position: absolute; /* Cambiado a absolute */
+      left: 0;
+      top: 0;
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const videos = [
+  {
+    titulo: "Croquetas de Jamon",
+    videoId: "0lU1Jll7-xc",
+    descripcion: "Aprende a hacer unas croquetas de jamón caseras"
+  },
+  {
+    titulo: "Foccacia con tomates y aceitunas",
+    videoId: "DlS6f9HZsdI",
+    descripcion: "Focaccia aromatica y esponjosa"
+  },
+  {
+    titulo: "Sobaos caseros ",
+    videoId: "J_eWFI8PpcU",
+    descripcion: "Sobaos pasiegos de manera facil"
+  }
+];
+---
+
+<Layout title="Videos - MAMBO RECETAS">
+  <h1 class="text-3xl font-bold text-sky-600 mb-8 text-center">Videos de Recetas</h1>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {videos.map(video => (
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="relative pb-[56.25%] h-0">
+          <iframe
+            src={`https://www.youtube.com/embed/${video.videoId}`}
+            class="absolute top-0 left-0 w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="p-4">
+          <h2 class="text-xl font-semibold text-sky-600 mb-2">{video.titulo}</h2>
+          <p class="text-gray-600 mb-4">{video.descripcion}</p>
+          <a
+            href={`https://www.youtube.com/watch?v=${video.videoId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-orange-600 hover:text-orange-700"
+          >
+            Ver en YouTube →
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
+</Layout>
