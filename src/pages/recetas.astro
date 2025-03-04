@@ -6,21 +6,15 @@ const recetas = [
     
     imagen: "/public/images/recetas/Salmorejoreceta.png",
     
+  
+    descripcion: "Delicioso salmorejo casero",
   },
   {
-    
+    descripcion: "Cardo con calabacín y almendras",
     imagen: "/public/images/recetas/Cardcalabacin.png",
-    
   },
   {
-    
-    imagen: "/public/images/recetas/lentejasreceta.png",
-    
-  },
-  {
-    
-    imagen: "/public/images/recetas/pastelverdurasreceta.jpg",
-    
+    descripcion: "Lentejas estofadas tradicionales",
   },
 ];
 ---
@@ -31,10 +25,10 @@ const recetas = [
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {recetas.map(receta => (
       <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <img src={receta.imagen} alt={receta.titulo} class="w-full h-100
+        <img src={receta.imagen} alt={receta.descripcion} class="w-full h-100
          object-cover"/>
         <div class="p-4">
-          <h2 class="text-xl font-semibold text-sky-600 mb-2">{receta.titulo}</h2>
+          <h2 class="text-xl font-semibold text-sky-600 mb-2">{receta.descripcion}</h2>
           <p class="text-gray-600">{receta.descripcion}</p>
         </div>
       </div>

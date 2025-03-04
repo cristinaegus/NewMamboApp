@@ -8,6 +8,7 @@ export default {
       },
       fontFamily: {
         'Nunito': ['nunito', 'sans-serif'],
+        'arial': ['arial', 'sans-serif'],
       }
       },
     },
