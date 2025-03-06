@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
 const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 const comidas = ['Desayuno', 'Comida', 'Cena'];
 ---
@@ -17,26 +16,35 @@ const comidas = ['Desayuno', 'Comida', 'Cena'];
       </button>
     </div>
     
-    <div id="menuContent" class="bg-white rounded-lg shadow-md p-6">
-      <div class="grid grid-cols-1 md:grid-cols-7 gap-2">
-        {diasSemana.map(dia => (
-          <div class="border rounded-sm   p-4">
-            <h2 class="text-xs font-semibold text-sky-600 mb-2">{dia}</h2>
-            <div class="space-y-1">
-              {comidas.map(comida => (
-                <div>
-                  <p class="text-xs text-gray-600">{comida}:</p>
+    <div id="menuContent" class="bg-white rounded-lg shadow-md p-6 menu-semanal">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr>
+            <th class="border p-2"></th>
+            {comidas.map(comida => (
+              <th class="border p-2 text-xs font-semibold text-sky-600">{comida}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {diasSemana.map(dia => (
+            <tr>
+              <td class="border p-2 text-xs font-semibold text-sky-600">{dia}</td>
+              {comidas.map((comida, index) => (
+                <td class="border p-2">
                   <input
                     type="text"
-                    class="w-full border rounded p-1 text-xs font-family arial font-size 10 focus:border-orange-600 focus:ring-1 focus:ring-orange-600"
+                    class="w-full border rounded p-1 text-sm focus:border-orange-600 focus:ring-1 focus:ring-orange-600 text-xs font-family arial font-size 10"
                     placeholder="Añadir receta..."
+                    data-dia={dia}
+                    data-comida={comida}
                   />
-                </div>
+                </td>
               ))}
-            </div>
-          </div>
-        ))}
-      </div>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   </div>
 </Layout>
@@ -45,93 +53,95 @@ const comidas = ['Desayuno', 'Comida', 'Cena'];
   import { jsPDF } from 'jspdf';
   import html2canvas from 'html2canvas';
 
-  const printButton = document.getElementById('printButton');
-  const menuContent = document.getElementById('menuContent');
+  document.addEventListener('DOMContentLoaded', () => {
+    const printButton = document.getElementById('printButton');
+    const menuContent = document.getElementById('menuContent');
 
-  if (printButton && menuContent) {
-    printButton.addEventListener('click', async () => {
-      try {
-        // Crear una copia del contenido para el PDF
-        const contentClone = menuContent.cloneNode(true) as HTMLElement;
-        document.body.appendChild(contentClone);
-        
-        // Aplicar estilos específicos para el PDF
-        contentClone.style.width = '1300px';
-        contentClone.style.position = 'absolute';
-        contentClone.style.left = '-9999px';
-        
-        // Convertir el contenido a canvas
-        const canvas = await html2canvas(contentClone, {
+    if (printButton && menuContent) {
+      printButton.addEventListener('click', async () => {
+        try {
+          // Crear una copia del contenido para el PDF
+          const contentClone = menuContent.cloneNode(true) as HTMLElement;
+          document.body.appendChild(contentClone);
+
+          // Copiar los valores de los inputs al clon
+          const originalInputs = menuContent.querySelectorAll('input');
+          const clonedInputs = contentClone.querySelectorAll('input');
+          originalInputs.forEach((input, index) => {
+            clonedInputs[index].value = input.value;
+          });
           
-          logging: false,
-          useCORS: true
-        });
-        
-        // Eliminar la copia
-        document.body.removeChild(contentClone);
-        
-        // Crear PDF
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({
-          orientation: 'landscape',
-          unit: 'mm',
-          format: 'a4'
+          // Aplicar estilos específicos para el PDF
+          contentClone.style.width = '210mm'; // Ancho de una página A4 en mm
+          contentClone.style.position = 'absolute';
+          contentClone.style.left = '-9999px';
           
-        });
-        
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        
-        // Descargar PDF
-        pdf.save('menu-semanal-mambo-recetas.pdf');
-      } catch (error) {
-        console.error('Error al generar el PDF:', error);
-        alert('Hubo un error al generar el PDF. Por favor, inténtalo de nuevo.');
-      }
-    });
-
-    // Guardar datos en localStorage cuando se modifiquen
-    const inputs = menuContent.querySelectorAll('input');
-    inputs.forEach((input, index) => {
-      // Cargar datos guardados
-      const savedValue = localStorage.getItem(`menu-item-${index}`);
-      if (savedValue) {
-        input.value = savedValue;
-      }
-
-      // Guardar al modificar
-      input.addEventListener('input', (e) => {
-        const target = e.target as HTMLInputElement;
-        localStorage.setItem(`menu-item-${index}`, target.value);
+          // Asegurarse de que el contenido clonado esté completamente visible
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Convertir el contenido a canvas
+          const canvas = await html2canvas(contentClone, {
+            logging: false,
+            useCORS: true,
+            scale: 2 // Aumentar la escala para mejorar la calidad
+          });
+          
+          // Eliminar la copia
+          document.body.removeChild(contentClone);
+          
+          // Crear PDF
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: 'a4'
+          });
+          
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = pdf.internal.pageSize.getHeight();
+          
+          pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+          
+          // Descargar PDF
+          pdf.save('menu-semanal-mambo-recetas.pdf');
+        } catch (error) {
+          console.error('Error al generar el PDF:', error);
+          alert('Hubo un error al generar el PDF. Por favor, inténtalo de nuevo.');
+        }
       });
-    });
-  }
+
+      // Guardar datos en localStorage cuando se modifiquen
+      const inputs = menuContent.querySelectorAll('input');
+      inputs.forEach((input, index) => {
+        // Cargar datos guardados
+        const savedValue = localStorage.getItem(`menu-item-${index}`);
+        if (savedValue) {
+          input.value = savedValue;
+        }
+
+        // Guardar al modificar
+        input.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement;
+          localStorage.setItem(`menu-item-${index}`, target.value);
+        });
+      });
+    }
+  });
 </script>
 
 <style>
   @media print {
     body * {
       visibility: hidden;
-      
-     
+      display: none;
     }
     #menuContent, #menuContent * {
       visibility: visible;
-    }
-    .menu-semanal {
-      font-size: 5pt;
-      font-family: Arial;
       display: block;
-      margin: 2cm;
-      width:18cm; 
-      text-overflow: ellipsis;
-      
-    
+       /* Ensure menuContent is displayed for printing */
     }
     #menuContent {
-      position: absolute; /* Cambiado a absolute */
+      position: absolute;
       left: 0;
       top: 0;
     }
