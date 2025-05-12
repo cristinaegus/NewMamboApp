@@ -1,25 +1,26 @@
 ---
 // filepath: c:\Users\Dell\C2bMAMBOAPP\MAMBOAPP\src\pages\formulario.astro
-import { useState } from 'react';
+
 import Navbar from '../components/Navbar.astro';
 
-const handleFormSubmit = (event) => {
+const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault();
 
   // Obtener los datos del formulario
+  const form = event.target as HTMLFormElement;
   const formData = {
-    nombre: event.target.nombre.value,
-    ingredientes: event.target.ingredientes.value,
-    instrucciones: event.target.instrucciones.value,
+    nombre: (form.elements.namedItem('nombre') as HTMLInputElement).value,
+    ingredientes: (form.elements.namedItem('ingredientes') as HTMLTextAreaElement).value,
+    instrucciones: (form.elements.namedItem('instrucciones') as HTMLTextAreaElement).value,
   };
 
   // Guardar los datos en localStorage
-  const recetas = JSON.parse(localStorage.getItem('recetas')) || [];
+  const recetas = JSON.parse(localStorage.getItem('recetas') || '[]');
   recetas.push(formData);
   localStorage.setItem('recetas', JSON.stringify(recetas));
 
   alert('Receta guardada en localStorage');
-  event.target.reset();
+  (event.target as HTMLFormElement).reset();
 };
 ---
 
