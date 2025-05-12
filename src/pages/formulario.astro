@@ -3,7 +3,7 @@
 
 import Navbar from '../components/Navbar.astro';
 
-const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault();
 
   // Obtener los datos del formulario
@@ -14,13 +14,25 @@ const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     instrucciones: (form.elements.namedItem('instrucciones') as HTMLTextAreaElement).value,
   };
 
-  // Guardar los datos en localStorage
-  const recetas = JSON.parse(localStorage.getItem('recetas') || '[]');
-  recetas.push(formData);
-  localStorage.setItem('recetas', JSON.stringify(recetas));
+  try {
+    // Enviar los datos al endpoint
+    const response = await fetch('/api/guardar-receta', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-  alert('Receta guardada en localStorage');
-  (event.target as HTMLFormElement).reset();
+    if (response.ok) {
+      alert('Receta guardada con éxito');
+      form.reset();
+    } else {
+      alert('Error al guardar la receta');
+    }
+  } catch (error) {
+    console.error('Error al enviar los datos:', error);
+  }
 };
 ---
 

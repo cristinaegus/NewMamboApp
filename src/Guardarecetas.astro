@@ -1,0 +1,36 @@
+---
+// filepath: c:\Users\Dell\C2bMAMBOAPP\MAMBOAPP\src\Guardarecetas.astro
+
+import { useEffect, useState } from 'react';
+
+interface Receta {
+  nombre: string;
+  ingredientes: string;
+  instrucciones: string;
+}
+
+const [recetas, setRecetas] = useState<Receta[]>([]);
+
+useEffect(() => {
+  const fetchRecetas = async () => {
+    const response = await fetch('/recetas.json');
+    const data = await response.json();
+    setRecetas(data);
+  };
+
+  fetchRecetas();
+}, []);
+---
+
+<div class="max-w-2xl mx-auto mt-8">
+  <h2 class="text-xl font-bold mb-4 text-gray-800">Recetas Guardadas</h2>
+  <div id="savedRecipes" class="space-y-4">
+    {recetas.map((receta, index) => (
+      <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+        <h3 class="text-lg font-semibold text-gray-800">{receta.nombre}</h3>
+        <p class="text-gray-600">Ingredientes: {receta.ingredientes}</p>
+        <p class="text-gray-600">Instrucciones: {receta.instrucciones}</p>
+      </div>
+    ))}
+  </div>
+</div>
