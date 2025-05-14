@@ -1,12 +1,12 @@
 ---
-// filepath: c:\Users\Dell\C2bMAMBOAPP\MAMBOAPP\src\pages\formulario.astro
 
+// filepath: c:\NuevaMamboApp\MAMBOAPP\src\layouts\Layout.astro
 import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
 
 const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault();
 
-  // Obtener los datos del formulario
   const form = event.target as HTMLFormElement;
   const formData = {
     nombre: (form.elements.namedItem('nombre') as HTMLInputElement).value,
@@ -15,7 +15,6 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
   };
 
   try {
-    // Enviar los datos al endpoint
     const response = await fetch('/src/api/aplipostgres.js', {
       method: 'POST',
       headers: {
@@ -25,10 +24,9 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     });
 
     if (response.ok) {
-      alert('Receta guardada con éxito');
       form.reset();
     } else {
-      alert('Error al guardar la receta');
+      console.error('Error al guardar la receta');
     }
   } catch (error) {
     console.error('Error al enviar los datos:', error);
@@ -38,45 +36,42 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 
 <Navbar />
 
-<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md mt-6">
+<style>
+  .form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-container h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+</style>
+
+<div class="form-container">
   <h2 class="text-2xl font-bold mb-4 text-gray-800">Comparte tu Receta</h2>
-  <form id="recipeForm" class="space-y-4">
+  <form id="recipeForm" class="space-y-4" onsubmit="handleFormSubmit(event)">
     <div>
-      <label class="block text-sm font-medium text-gray-700">
-        Nombre de la receta:
-      </label>
-      <input
-        type="text"
-        name="nombre"
-        required
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-      />
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" class="border border-gray-300 rounded p-2 w-full" required />
     </div>
     <div>
-      <label class="block text-sm font-medium text-gray-700">
-        Ingredientes:
-      </label>
-      <textarea
-        name="ingredientes"
-        required
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-      ></textarea>
+      <label for="ingredientes">Ingredientes</label>
+      <textarea id="ingredientes" name="ingredientes" class="border border-gray-300 rounded p-2 w-full" required></textarea>
     </div>
     <div>
-      <label class="block text-sm font-medium text-gray-700">
-        Instrucciones:
-      </label>
-      <textarea
-        name="instrucciones"
-        required
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-      ></textarea>
+      <label for="instrucciones">Instrucciones</label>
+      <textarea id="instrucciones" name="instrucciones" class="border border-gray-300 rounded p-2 w-full" required></textarea>
     </div>
-    <button
-      type="submit"
-      class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-    >
+    <button type="submit" class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
       Guardar Receta
     </button>
   </form>
 </div>
+
+<Footer />
