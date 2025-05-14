@@ -39,13 +39,14 @@ const Formulario = () => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form onSubmit={handleFormSubmit} className="space-y-4">
       <input
         type="text"
         name="nombre"
         placeholder="Nombre"
         value={formData.nombre}
         onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+        className="border border-gray-300 rounded p-2 w-full"
       />
       <textarea
         name="ingredientes"
@@ -54,6 +55,7 @@ const Formulario = () => {
         onChange={(e) =>
           setFormData({ ...formData, ingredientes: e.target.value })
         }
+        className="border border-gray-300 rounded p-2 w-full"
       />
       <textarea
         name="instrucciones"
@@ -62,8 +64,14 @@ const Formulario = () => {
         onChange={(e) =>
           setFormData({ ...formData, instrucciones: e.target.value })
         }
+        className="border border-gray-300 rounded p-2 w-full"
       />
-      <button type="submit">Guardar Receta</button>
+      <button
+        type="submit"
+        className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
+      >
+        Guardar Receta
+      </button>
     </form>
   );
 };
