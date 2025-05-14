@@ -18,7 +18,7 @@ const Formulario = () => {
     };
 
     try {
-      const response = await fetch("/api/guardar-receta", {
+      const response = await fetch("/api/aplipostgres", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

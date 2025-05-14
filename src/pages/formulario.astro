@@ -16,7 +16,7 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 
   try {
     // Enviar los datos al endpoint
-    const response = await fetch('/api/guardar-receta', {
+    const response = await fetch('/src/api/aplipostgres.js', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
