@@ -1,61 +1,13 @@
 ---
-
-// filepath: c:\NuevaMamboApp\MAMBOAPP\src\layouts\Layout.astro
+// filepath: c:\NuevaMamboApp\MAMBOAPP\src\pages\formulario.astro
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-
-const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-
-  const form = event.target as HTMLFormElement;
-  const formData = {
-    nombre: (form.elements.namedItem('nombre') as HTMLInputElement).value,
-    ingredientes: (form.elements.namedItem('ingredientes') as HTMLTextAreaElement).value,
-    instrucciones: (form.elements.namedItem('instrucciones') as HTMLTextAreaElement).value,
-  };
-
-  try {
-    const response = await fetch('/src/api/aplipostgres.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (response.ok) {
-      form.reset();
-    } else {
-      console.error('Error al guardar la receta');
-    }
-  } catch (error) {
-    console.error('Error al enviar los datos:', error);
-  }
-};
 ---
-
 <Navbar />
-
-<style>
-  .form-container {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .form-container h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-  }
-</style>
 
 <div class="form-container">
   <h2 class="text-2xl font-bold mb-4 text-gray-800">Comparte tu Receta</h2>
-  <form id="recipeForm" class="space-y-4" onsubmit="handleFormSubmit(event)">
+  <form id="recipeForm" class="space-y-4">
     <div>
       <label for="nombre">Nombre</label>
       <input type="text" id="nombre" name="nombre" class="border border-gray-300 rounded p-2 w-full" required />
@@ -75,3 +27,38 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 </div>
 
 <Footer />
+
+<script>
+  const recipeForm = document.getElementById('recipeForm');
+  if (recipeForm) {
+    recipeForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const form = event.target as HTMLFormElement;
+      if (!form) {
+        alert('Formulario no encontrado');
+        return;
+      }
+      const formData = {
+        nombre: (form.elements.namedItem('nombre') as HTMLInputElement)?.value,
+        ingredientes: (form.elements.namedItem('ingredientes') as HTMLTextAreaElement)?.value,
+        instrucciones: (form.elements.namedItem('instrucciones') as HTMLTextAreaElement)?.value,
+      };
+      try {
+        const response = await fetch('/api/aplipostgres.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        if (response.ok) {
+          form.reset();
+          alert('Receta guardada con éxito');
+        } else {
+          alert('Error al guardar la receta');
+        }
+      } catch (error) {
+        alert('Error al enviar los datos');
+        console.error(error);
+      }
+    });
+  }
+</script>

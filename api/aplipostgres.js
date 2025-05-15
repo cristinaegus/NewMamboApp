@@ -9,13 +9,14 @@ export async function post({ request }) {
 
   // Crear un pool de conexiones
   const pool = new Pool({
-    connectionString,
+    connectionString: connectionString,
+    ssl: { rejectUnauthorized: false },
   });
 
   try {
     // Inserta los datos en la base de datos
     const query = `
-      INSERT INTO Recetas (nombre, ingredientes, instrucciones)
+      INSERT INTO recetas (nombre, ingredientes, instrucciones)
       VALUES ($1, $2, $3)
     `;
     const values = [
@@ -25,7 +26,7 @@ export async function post({ request }) {
     ];
 
     await pool.query(query, values);
-
+    console.log("Datos recibidos:", formData);
     return new Response(
       JSON.stringify({ message: "Receta guardada con éxito" }),
       {
