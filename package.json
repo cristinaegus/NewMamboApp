@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/react": "^4.2.7",
     "@astrojs/tailwind": "^5.1.5",
+    "@neondatabase/serverless": "^1.0.0",
     "fs-extra": "^11.3.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.2",

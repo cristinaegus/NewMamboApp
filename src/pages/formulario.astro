@@ -2,12 +2,13 @@
 // filepath: c:\NuevaMamboApp\MAMBOAPP\src\pages\formulario.astro
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import '../scripts/enviarReceta.js';
 ---
 <Navbar />
 
 <div class="form-container">
   <h2 class="text-2xl font-bold mb-4 text-gray-800">Comparte tu Receta</h2>
-  <form id="recipeForm" class="space-y-4">
+  <form id="recipeForm" class="space-y-4"  method="POST">
     <div>
       <label for="nombre">Nombre</label>
       <input type="text" id="nombre" name="nombre" class="border border-gray-300 rounded p-2 w-full" required />
@@ -27,38 +28,7 @@ import Footer from '../components/Footer.astro';
 </div>
 
 <Footer />
-
-<script>
-  const recipeForm = document.getElementById('recipeForm');
-  if (recipeForm) {
-    recipeForm.addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const form = event.target as HTMLFormElement;
-      if (!form) {
-        alert('Formulario no encontrado');
-        return;
-      }
-      const formData = {
-        nombre: (form.elements.namedItem('nombre') as HTMLInputElement)?.value,
-        ingredientes: (form.elements.namedItem('ingredientes') as HTMLTextAreaElement)?.value,
-        instrucciones: (form.elements.namedItem('instrucciones') as HTMLTextAreaElement)?.value,
-      };
-      try {
-        const response = await fetch('/api/aplipostgres.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
-        if (response.ok) {
-          form.reset();
-          alert('Receta guardada con éxito');
-        } else {
-          alert('Error al guardar la receta');
-        }
-      } catch (error) {
-        alert('Error al enviar los datos');
-        console.error(error);
-      }
-    });
-  }
+<script type="module">
+  import { setupFormulario } from '/src/scripts/enviarReceta.js';
+  setupFormulario();
 </script>
