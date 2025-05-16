@@ -1,38 +1,45 @@
-import { Pool } from "pg";
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function post({ request }) {
-  const formData = await request.formData();
-  const nombre = formData.get("nombre");
-  const ingredientes = formData.get("ingredientes");
-  const instrucciones = formData.get("instrucciones");
-
-  const connectionString =
-    "postgresql://recetasmambo_owner:npg_OXlzTMFJ2Dw5@ep-gentle-hat-a2ld8qdm-pooler.eu-central-1.aws.neon.tech/recetasmambo?sslmode=require";
-
-  const pool = new Pool({
-    connectionString,
-    ssl: { rejectUnauthorized: false },
-  });
-
   try {
-    const query = `
-      INSERT INTO recetas (nombre, ingredientes, instrucciones)
-      VALUES ($1, $2, $3)
-    `;
-    const values = [nombre, ingredientes, instrucciones];
+    const formData = await request.formData();
+    const nombre = formData.get("nombre");
+    const ingredientes = formData.get("ingredientes");
+    const instrucciones = formData.get("instrucciones");
 
-    await pool.query(query, values);
+    const { data, error } = await supabase
+      .from('recetas')
+      .insert([
+        {
+          nombre,
+          ingredientes,
+          instrucciones,
+          created_at: new Date().toISOString()
+        }
+      ]);
+
+    if (error) throw error;
+
     return new Response(
       JSON.stringify({ message: "Receta guardada con éxito" }),
-      { status: 200 }
+      { 
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
   } catch (error) {
     console.error("Error al guardar la receta:", error);
     return new Response(
       JSON.stringify({ error: "Error al guardar la receta" }),
-      { status: 500 }
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
     );
-  } finally {
-    await pool.end();
   }
 }

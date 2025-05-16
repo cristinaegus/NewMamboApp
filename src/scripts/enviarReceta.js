@@ -3,27 +3,25 @@ export function setupFormulario() {
   if (recipeForm) {
     recipeForm.addEventListener("submit", async function (event) {
       event.preventDefault();
-      const form = event.target;
-      const formData = {
-        nombre: form.nombre.value,
-        ingredientes: form.ingredientes.value,
-        instrucciones: form.instrucciones.value,
-      };
+      
+      const formData = new FormData(event.target);
+      
       try {
-        const response = await fetch("/src/api/aplipostgres.js", {
+        const response = await fetch("/api/aplipostgres", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: formData
         });
+
         if (response.ok) {
-          form.reset();
+          event.target.reset();
           alert("Receta guardada con éxito");
         } else {
-          alert("Error al guardar la receta");
+          const data = await response.json();
+          alert(data.error || "Error al guardar la receta");
         }
       } catch (error) {
+        console.error("Error:", error);
         alert("Error al enviar los datos");
-        console.error(error);
       }
     });
   }
