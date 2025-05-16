@@ -1,16 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
-    extend: {
-      colors: {
-        
-      },
-      fontFamily: {
-        'Nunito': ['nunito', 'sans-serif'],
-        'arial': ['arial', 'sans-serif'],
-      }
-      },
-    },
-  };
-
+    extend: {},
+  },
+  plugins: [],
+};

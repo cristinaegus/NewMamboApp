@@ -1,0 +1,49 @@
+---
+// filepath: c:\Users\egusq\MAMBOAPP\src\pages\formulario.astro
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import Guardarecetas from '../components/Guardarecetas.astro';
+import '../scripts/enviarReceta.js';
+---
+
+<Navbar />
+
+<div class="form-container">
+  <h2 class="text-2xl font-bold mb-4 text-gray-800">Comparte tu Receta</h2>
+  <form id="recipeForm" class="space-y-4"  method="POST">
+    <div>
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" class="border border-gray-300 rounded p-2 w-full" required />
+    </div>
+    <div>
+      <label for="ingredientes">Ingredientes</label>
+      <textarea id="ingredientes" name="ingredientes" class="border border-gray-300 rounded p-2 w-full" required></textarea>
+    </div>
+    <div>
+      <label for="instrucciones">Instrucciones</label>
+      <textarea id="instrucciones" name="instrucciones" class="border border-gray-300 rounded p-2 w-full" required></textarea>
+    </div>
+    <button type="submit" class="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600">
+      Guardar Receta
+    </button>
+  </form>
+</div>
+
+<!-- Renderiza aquí el componente Guardarecetas con datos de ejemplo -->
+<Guardarecetas 
+  nombre="Ejemplo de receta"
+  ingredientes="2 huevos\n1 taza de leche\nSal al gusto"
+  instrucciones="1. Batir los huevos.\n2. Añadir la leche y la sal.\n3. Cocinar en sartén."
+/>
+
+<div class="recetas-container mt-8">
+  <h2 class="text-2xl font-bold mb-4 text-gray-800">Recetas Guardadas</h2>
+  <div id="recetasList" class="space-y-4">
+    <!-- Aquí se mostrarán las recetas guardadas -->
+  </div>
+</div>
+<Footer />
+<script type="module">
+  import { setupFormulario } from '/src/scripts/enviarReceta.js';
+  setupFormulario();
+</script>
