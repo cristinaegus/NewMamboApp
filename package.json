@@ -10,8 +10,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/tailwind": "^5.1.0",
-    "astro": "^5.2.5",
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^5.7.13",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "mambo-recetas": "file:",
