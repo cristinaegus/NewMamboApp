@@ -5,7 +5,5 @@ import tailwindcss from "tailwindcss/tailwind.css";
 
 export default defineConfig({
   integrations: [tailwind(), react()],
-  devOptions: {
-    toolbar: false, // Desactiva la DevToolbar
-  },
+  toolbar: false, // Desactiva la DevToolbar correctamente
 });
