@@ -3,7 +3,7 @@
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import Guardarecetas from '../components/Guardarecetas.astro';
-import 'src/scripts/enviarReceta.js';
+
 ---
 
 <Navbar />
@@ -40,6 +40,6 @@ import 'src/scripts/enviarReceta.js';
 </div>
 <Footer />
 <script type="module">
-  import { setupFormulario } from '/src/scripts/enviarReceta.js';
+  import { setupFormulario } from '/src/scripts/enviarReceta.js'
   setupFormulario();
 </script>
