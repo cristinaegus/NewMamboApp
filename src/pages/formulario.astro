@@ -2,7 +2,7 @@
 // filepath: c:\Users\egusq\MAMBOAPP\src\pages\formulario.astro
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import Guardarecetas from '../components/Guardarecetas.astro';
+import '../styles/global.css';
 ---
 
 <Navbar />
@@ -28,9 +28,6 @@ import Guardarecetas from '../components/Guardarecetas.astro';
   </form>
 </div>
 
-<!-- Renderiza aquí el componente Guardarecetas con datos de ejemplo -->
-
-
 <div class="recetas-container mt-8">
   <h2 class="text-2xl font-bold mb-4 text-gray-800">Recetas Guardadas</h2>
   <div id="recetasList" class="space-y-4">
@@ -39,7 +36,7 @@ import Guardarecetas from '../components/Guardarecetas.astro';
 </div>
 <Footer />
 
-<script type="module" is:inline>
+<script type="module">
   import { setupFormulario } from '/src/scripts/enviarReceta.js';
   if (typeof window !== 'undefined' && !window.__formularioSetup) {
     setupFormulario();
