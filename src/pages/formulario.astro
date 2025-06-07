@@ -3,7 +3,6 @@
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import Guardarecetas from '../components/Guardarecetas.astro';
-import '../scripts/enviarReceta.js';
 ---
 
 <Navbar />
@@ -39,7 +38,11 @@ import '../scripts/enviarReceta.js';
   </div>
 </div>
 <Footer />
-<script type="module">
+
+<script type="module" is:inline>
   import { setupFormulario } from '/src/scripts/enviarReceta.js';
-  setupFormulario();
+  if (typeof window !== 'undefined' && !window.__formularioSetup) {
+    setupFormulario();
+    window.__formularioSetup = true;
+  }
 </script>
